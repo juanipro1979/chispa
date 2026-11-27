@@ -102,12 +102,6 @@ cargo obs-build build --out-dir target/release   # descarga el runtime de OBS 32
 
 Los tests se corren con `cargo test --release --workspace`. Con `CHISPA_DEBUG=1`, el prototipo de consola muestra qué micrófono eligió.
 
-## Pendientes
-
-- Falta probar en vivo de verdad a cada plataforma: hasta ahora se probaron el encode, el armado de las salidas y el guardián.
-- Para leer el chat de YouTube hace falta OAuth de Google: por ahora solo se transmite.
-- Los mensajes del motor todavía están solo en español; la interfaz está en español e inglés.
-
 ## Licencia
 
 [GPL-3.0-or-later](LICENSE). Chispa usa libobs (GPL-2.0-or-later) y libobs-rs (GPL-3.0).
