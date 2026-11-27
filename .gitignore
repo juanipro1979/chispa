@@ -1,0 +1,14 @@
+/target
+/clips
+/grabaciones
+*.mp4
+*.mkv
+/bench/obs-config-backup
+/bench/obs-out
+/bench/*.txt
+/dist
+/obs-build
+/rtmp-services
+/text-freetype2
+/win-capture
+/app/gen

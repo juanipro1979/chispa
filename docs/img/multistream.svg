@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360" role="img" aria-labelledby="t d">
+  <title id="t">Multistream con un solo encode</title>
+  <desc id="d">La escena se codifica una sola vez en la GPU y el mismo video se manda por RTMP a Twitch, Kick y YouTube. El guardián vigila cada salida.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 10 5 0 10z" fill="#8b8b96"/>
+    </marker>
+  </defs>
+  <rect width="960" height="360" rx="20" fill="#16161a"/>
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="40" y="50" font-size="24" font-weight="700" fill="#ececf0">Tres plataformas, la CPU/GPU de una</text>
+    <text x="40" y="78" font-size="15" fill="#8b8b96">Se codifica una sola vez y cada destino comparte ese video: solo se multiplica el uso de red.</text>
+
+    <!-- Escena -->
+    <rect x="40" y="130" width="170" height="150" rx="14" fill="#1a1a1e" stroke="#2c2c33"/>
+    <text x="125" y="160" text-anchor="middle" font-size="16" font-weight="650" fill="#ececf0">Escena</text>
+    <text x="125" y="190" text-anchor="middle" font-size="13" fill="#8b8b96">pantalla / juego</text>
+    <text x="125" y="212" text-anchor="middle" font-size="13" fill="#8b8b96">cámara</text>
+    <text x="125" y="234" text-anchor="middle" font-size="13" fill="#8b8b96">audio PC + mic</text>
+    <text x="125" y="256" text-anchor="middle" font-size="13" fill="#8b8b96">alertas</text>
+
+    <line x1="212" y1="205" x2="282" y2="205" stroke="#8b8b96" stroke-width="2" marker-end="url(#a)"/>
+
+    <!-- Encoder -->
+    <rect x="286" y="140" width="200" height="130" rx="14" fill="#ff7a1a1f" stroke="#ff7a1a" stroke-width="2"/>
+    <text x="386" y="186" text-anchor="middle" font-size="18" font-weight="700" fill="#ff9a4d">1 encode</text>
+    <text x="386" y="212" text-anchor="middle" font-size="13" fill="#e6c3a8">H.264 por GPU</text>
+    <text x="386" y="232" text-anchor="middle" font-size="13" fill="#e6c3a8">(NVENC · AMF · QuickSync)</text>
+    <text x="386" y="252" text-anchor="middle" font-size="13" fill="#e6c3a8">+ AAC</text>
+
+    <!-- Flechas a destinos -->
+    <path d="M488 190 C560 190 560 120 628 120" fill="none" stroke="#8b8b96" stroke-width="2" marker-end="url(#a)"/>
+    <line x1="488" y1="205" x2="626" y2="205" stroke="#8b8b96" stroke-width="2" marker-end="url(#a)"/>
+    <path d="M488 220 C560 220 560 290 628 290" fill="none" stroke="#8b8b96" stroke-width="2" marker-end="url(#a)"/>
+
+    <!-- Destinos -->
+    <g font-size="16" font-weight="650">
+      <rect x="632" y="96" width="180" height="48" rx="12" fill="#1a1a1e" stroke="#9146ff"/>
+      <rect x="646" y="112" width="16" height="16" rx="4" fill="#9146ff"/>
+      <text x="674" y="126" fill="#ececf0">Twitch</text>
+      <rect x="632" y="181" width="180" height="48" rx="12" fill="#1a1a1e" stroke="#53fc18"/>
+      <rect x="646" y="197" width="16" height="16" rx="4" fill="#53fc18"/>
+      <text x="674" y="211" fill="#ececf0">Kick</text>
+      <rect x="632" y="266" width="180" height="48" rx="12" fill="#1a1a1e" stroke="#ff3b4a"/>
+      <rect x="646" y="282" width="16" height="16" rx="4" fill="#ff3b4a"/>
+      <text x="674" y="296" fill="#ececf0">YouTube</text>
+    </g>
+    <g font-size="12" fill="#8b8b96">
+      <text x="822" y="124">RTMP</text>
+      <text x="822" y="209">RTMPS</text>
+      <text x="822" y="294">RTMP</text>
+    </g>
+
+    <text x="40" y="330" font-size="13" fill="#8b8b96">Guardián en vivo: frames perdidos por destino, reconexión automática, bitrate dinámico y aviso si la CPU pasa el 90 %.</text>
+  </g>
+</svg>

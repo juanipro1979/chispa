@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400" width="1280" height="400" role="img" aria-labelledby="t d">
+  <title id="t">Chispa</title>
+  <desc id="d">Chispa: grabá, clipeá y transmití en PCs flojas. Hecha sobre el motor de OBS, sin su peso.</desc>
+  <defs>
+    <radialGradient id="glow" cx="22%" cy="50%" r="55%">
+      <stop offset="0" stop-color="#ff7a1a" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#ff7a1a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bolt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffb066"/>
+      <stop offset="1" stop-color="#ff6a00"/>
+    </linearGradient>
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.2" fill="#ffffff" fill-opacity=".05"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="400" rx="24" fill="#111113"/>
+  <rect width="1280" height="400" rx="24" fill="url(#dots)"/>
+  <rect width="1280" height="400" rx="24" fill="url(#glow)"/>
+
+  <!-- Logo -->
+  <g transform="translate(150 80)">
+    <rect width="240" height="240" rx="56" fill="#1a1a1e" stroke="#2c2c33" stroke-width="2"/>
+    <path d="M136 30 52 140h66l-10 72 82-112h-66z" fill="url(#bolt)"/>
+    <!-- chispitas -->
+    <circle cx="200" cy="52" r="6" fill="#ffb066"/>
+    <circle cx="214" cy="84" r="3.5" fill="#ff7a1a"/>
+    <circle cx="40" cy="196" r="4.5" fill="#ff7a1a" fill-opacity=".8"/>
+  </g>
+
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="460" y="178" font-size="104" font-weight="800" fill="#ececf0" letter-spacing="-2">Chispa</text>
+    <text x="464" y="232" font-size="30" fill="#c9c9d2">Grabá, clipeá y transmití en PCs flojas.</text>
+    <text x="464" y="272" font-size="22" fill="#8b8b96">El motor de OBS, sin su peso · se configura solo · por voz</text>
+
+    <g font-size="17" font-weight="600">
+      <rect x="464" y="300" width="190" height="36" rx="18" fill="#ff7a1a22" stroke="#ff7a1a"/>
+      <text x="559" y="324" text-anchor="middle" fill="#ff9a4d">Twitch + Kick + YT</text>
+      <rect x="666" y="300" width="206" height="36" rx="18" fill="#1a1a1e" stroke="#2c2c33"/>
+      <text x="769" y="324" text-anchor="middle" fill="#c9c9d2">«Chispa, clipeá eso»</text>
+      <rect x="884" y="300" width="150" height="36" rx="18" fill="#1a1a1e" stroke="#2c2c33"/>
+      <text x="959" y="324" text-anchor="middle" fill="#c9c9d2">106 MB en vivo</text>
+      <rect x="1046" y="300" width="126" height="36" rx="18" fill="#1a1a1e" stroke="#2c2c33"/>
+      <text x="1109" y="324" text-anchor="middle" fill="#c9c9d2">Open source</text>
+    </g>
+  </g>
+</svg>

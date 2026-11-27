@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chispa</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+      <span>Chispa</span>
+    </div>
+    <div id="chip" class="chip" data-i18n="booting">Preparando…</div>
+  </header>
+
+  <div id="boot" class="boot">
+    <div class="pulse"></div>
+    <p id="boot-msg" data-i18n="booting_engine">Preparando el motor…</p>
+  </div>
+
+  <main id="main" hidden>
+    <nav class="tabs" role="tablist">
+      <button data-tab="control" class="sel" data-i18n="tab_control">Control</button>
+      <button data-tab="chat"><span data-i18n="tab_chat">Chat</span> <span id="chat-badge" class="badge" hidden></span></button>
+      <button data-tab="settings" data-i18n="tab_settings">Ajustes</button>
+    </nav>
+
+    <!-- ============ CONTROL ============ -->
+    <section id="tab-control" class="tab">
+      <section class="actions">
+        <button class="act" id="btn-clip" data-action="clip">
+          <span class="act-icon">✂</span>
+          <span class="act-label" data-i18n="clip">Clip</span>
+          <span class="act-sub" id="sub-clip"></span>
+          <kbd data-hk="clip"></kbd>
+        </button>
+        <button class="act" id="btn-record" data-action="record">
+          <span class="act-icon dot"></span>
+          <span class="act-label" id="lbl-record"></span>
+          <span class="act-sub" id="sub-record"></span>
+          <kbd data-hk="record"></kbd>
+        </button>
+        <button class="act wide" id="btn-stream" data-action="stream">
+          <span class="act-icon live">●</span>
+          <span class="act-label" id="lbl-stream"></span>
+          <span class="act-sub" id="sub-stream"></span>
+          <kbd data-hk="stream"></kbd>
+        </button>
+      </section>
+
+      <div id="health" class="health" hidden></div>
+
+      <div class="seg scenes" role="radiogroup" aria-label="Escena">
+        <button data-scene="juego" data-i18n="scene_game">Juego</button>
+        <button data-scene="pausa" data-i18n="scene_brb">Ya vuelvo</button>
+        <button data-scene="charla" data-i18n="scene_talk">Charla</button>
+      </div>
+
+      <section class="rows">
+        <button class="row" data-action="vertical" id="row-vertical">
+          <span data-i18n="vertical">Clip vertical (TikTok/Shorts)</span><kbd data-hk="vertical"></kbd>
+        </button>
+        <button class="row" data-action="mic" id="row-mic">
+          <span data-i18n="mic">Micrófono</span><span class="pill" id="pill-mic">—</span><kbd data-hk="mic"></kbd>
+        </button>
+        <button class="row" data-action="camera" id="row-camera">
+          <span data-i18n="camera">Cámara</span><span class="pill" id="pill-camera">—</span>
+        </button>
+        <button class="row" data-action="voice" id="row-voice">
+          <span data-i18n="voice">Voz «Chispa, …»</span><span class="pill" id="pill-voice">—</span><kbd data-hk="voice"></kbd>
+        </button>
+        <button class="row" data-action="replay" id="row-replay">
+          <span data-i18n="auto_clips">Clips automáticos</span><span class="pill" id="pill-replay">—</span>
+        </button>
+        <div class="row static">
+          <span data-i18n="folders">Carpetas</span>
+          <span class="links">
+            <button class="link" data-folder="clips" data-i18n="clips">Clips</button>
+            <button class="link" data-folder="rec" data-i18n="recordings">Grabaciones</button>
+          </span>
+        </div>
+      </section>
+
+      <button id="stream-mode" class="ghost" data-i18n="stream_mode">Modo Stream: esconder en la bandeja</button>
+      <p id="hk-warn" class="warn" hidden></p>
+    </section>
+
+    <!-- ============ CHAT ============ -->
+    <section id="tab-chat" class="tab" hidden>
+      <div id="chat-list" class="chat-list"></div>
+      <p id="chat-empty" class="muted small" data-i18n="chat_empty">Cargá tu canal de Twitch y/o Kick en Ajustes para ver el chat acá.</p>
+    </section>
+
+    <!-- ============ AJUSTES ============ -->
+    <section id="tab-settings" class="tab" hidden>
+      <h3 data-i18n="where_live">¿Dónde salgo en vivo?</h3>
+      <p class="muted small" data-i18n="multi_hint">Podés elegir varias: se codifica una sola vez y se manda a todas.</p>
+      <div class="seg multi" aria-label="Destinos">
+        <button data-target="twitch">Twitch <i data-keyok="twitch"></i></button>
+        <button data-target="youtube">YouTube <i data-keyok="youtube"></i></button>
+        <button data-target="kick">Kick <i data-keyok="kick"></i></button>
+      </div>
+
+      <details class="card">
+        <summary>Twitch <span id="tw-state" class="muted"></span></summary>
+        <label><span data-i18n="client_id">Client ID (dev.twitch.tv → tu app)</span>
+          <input id="tw-client" type="text" spellcheck="false" placeholder="abcd1234…" />
+        </label>
+        <div class="btnrow">
+          <button id="tw-connect" class="primary" data-i18n="connect">Conectar cuenta</button>
+          <button id="tw-disconnect" class="ghost small-btn" hidden data-i18n="disconnect">Desconectar</button>
+          <button class="link" data-link="https://dev.twitch.tv/console/apps/create" data-i18n="create_app">Crear app</button>
+        </div>
+        <p id="tw-code" class="code" hidden></p>
+        <div id="tw-channel-wrap">
+          <label><span data-i18n="title">Título</span><input id="tw-title" type="text" /></label>
+          <label><span data-i18n="category">Categoría</span><input id="tw-cat" type="text" placeholder="Just Chatting" /></label>
+          <button id="tw-update" class="ghost" data-i18n="update_twitch">Actualizar en Twitch</button>
+        </div>
+        <label><span data-i18n="key">Clave de transmisión</span> <span class="muted" data-keystate="twitch"></span>
+          <input data-key="twitch" type="password" autocomplete="off" spellcheck="false" />
+        </label>
+        <label><span data-i18n="chat_channel">Canal para el chat</span>
+          <input id="tw-channel" type="text" spellcheck="false" placeholder="tu_canal" />
+        </label>
+      </details>
+
+      <details class="card">
+        <summary>YouTube</summary>
+        <label><span data-i18n="key">Clave de transmisión</span> <span class="muted" data-keystate="youtube"></span>
+          <input data-key="youtube" type="password" autocomplete="off" spellcheck="false" />
+        </label>
+        <p class="muted small" data-i18n="yt_hint">YouTube Studio → Emitir en vivo → Clave de transmisión.</p>
+      </details>
+
+      <details class="card">
+        <summary>Kick</summary>
+        <label><span data-i18n="kick_url">URL del servidor (panel de Kick → Stream)</span>
+          <input id="kick-url" type="text" placeholder="rtmps://…" spellcheck="false" />
+        </label>
+        <label><span data-i18n="key">Clave de transmisión</span> <span class="muted" data-keystate="kick"></span>
+          <input data-key="kick" type="password" autocomplete="off" spellcheck="false" />
+        </label>
+        <label><span data-i18n="chat_channel">Canal para el chat</span>
+          <input id="kick-channel" type="text" spellcheck="false" placeholder="tu_canal" />
+        </label>
+      </details>
+
+      <details class="card">
+        <summary data-i18n="more">Más</summary>
+        <label class="check"><input id="opt-chat" type="checkbox" /> <span data-i18n="opt_chat">Leer el chat (Twitch + Kick)</span></label>
+        <label class="check"><input id="opt-alerts" type="checkbox" /> <span data-i18n="opt_alerts">Mostrar alertas (subs, raids, bits) en el stream</span></label>
+        <div class="seg" aria-label="Idioma">
+          <button data-lang="es">Español</button>
+          <button data-lang="en">English</button>
+        </div>
+      </details>
+
+      <p class="muted small" data-i18n="keys_safe">Las claves y tokens se guardan en el Administrador de credenciales de Windows, no en un archivo.</p>
+      <button id="save" class="primary" data-i18n="save">Guardar</button>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="i18n.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

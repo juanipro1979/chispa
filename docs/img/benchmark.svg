@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="960" height="400" role="img" aria-labelledby="t d">
+  <title id="t">Chispa contra OBS 32.0.4 en una PC floja</title>
+  <desc id="d">Misma escena, mismo encoder AMF, 60 segundos. CPU promedio: OBS 2,5 %, Chispa 2,0 %. RAM promedio: OBS 166 MB, Chispa 92 MB. GPU promedio: OBS 28,8 %, Chispa 26,7 %.</desc>
+  <rect width="960" height="400" rx="20" fill="#16161a"/>
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif">
+    <text x="40" y="52" font-size="24" font-weight="700" fill="#ececf0">Chispa contra OBS en una PC floja</text>
+    <text x="40" y="80" font-size="15" fill="#8b8b96">RX 560 · 4 hilos · 8 GB · misma escena 1080p→720p30, AMF 3,5 Mbps, replay de 30 s · menos es mejor</text>
+
+    <!-- Leyenda -->
+    <g font-size="14" fill="#c9c9d2">
+      <rect x="640" y="36" width="14" height="14" rx="3" fill="#6f86c9"/><text x="660" y="48">OBS 32.0.4</text>
+      <rect x="760" y="36" width="14" height="14" rx="3" fill="#e2600c"/><text x="780" y="48">Chispa</text>
+    </g>
+
+    <!-- Panel 1: CPU (escala 0–3 %) ancho útil 220 -->
+    <g transform="translate(40 120)">
+      <text x="0" y="0" font-size="16" font-weight="650" fill="#ececf0">CPU promedio</text>
+      <line x1="0" y1="20" x2="0" y2="200" stroke="#2c2c33"/>
+      <text x="0" y="52" font-size="13" fill="#8b8b96">OBS</text>
+      <rect x="0" y="60" width="183" height="34" rx="4" fill="#6f86c9"/>
+      <text x="191" y="83" font-size="15" fill="#ececf0">2,5 %</text>
+      <text x="0" y="132" font-size="13" fill="#8b8b96">Chispa</text>
+      <rect x="0" y="140" width="147" height="34" rx="4" fill="#e2600c"/>
+      <text x="155" y="163" font-size="15" font-weight="700" fill="#ececf0">2,0 %</text>
+    </g>
+
+    <!-- Panel 2: RAM (escala 0–200 MB) -->
+    <g transform="translate(340 120)">
+      <text x="0" y="0" font-size="16" font-weight="650" fill="#ececf0">RAM promedio</text>
+      <line x1="0" y1="20" x2="0" y2="200" stroke="#2c2c33"/>
+      <text x="0" y="52" font-size="13" fill="#8b8b96">OBS</text>
+      <rect x="0" y="60" width="183" height="34" rx="4" fill="#6f86c9"/>
+      <text x="191" y="83" font-size="15" fill="#ececf0">166 MB</text>
+      <text x="0" y="132" font-size="13" fill="#8b8b96">Chispa</text>
+      <rect x="0" y="140" width="101" height="34" rx="4" fill="#e2600c"/>
+      <text x="109" y="163" font-size="15" font-weight="700" fill="#ececf0">92 MB <tspan fill="#ff9a4d">−45 %</tspan></text>
+    </g>
+
+    <!-- Panel 3: GPU (escala 0–32 %) -->
+    <g transform="translate(640 120)">
+      <text x="0" y="0" font-size="16" font-weight="650" fill="#ececf0">GPU promedio</text>
+      <line x1="0" y1="20" x2="0" y2="200" stroke="#2c2c33"/>
+      <text x="0" y="52" font-size="13" fill="#8b8b96">OBS</text>
+      <rect x="0" y="60" width="198" height="34" rx="4" fill="#6f86c9"/>
+      <text x="206" y="83" font-size="15" fill="#ececf0">28,8 %</text>
+      <text x="0" y="132" font-size="13" fill="#8b8b96">Chispa</text>
+      <rect x="0" y="140" width="183" height="34" rx="4" fill="#e2600c"/>
+      <text x="191" y="163" font-size="15" font-weight="700" fill="#ececf0">26,7 %</text>
+    </g>
+
+    <text x="40" y="372" font-size="13" fill="#8b8b96">Medido con bench/measure.ps1 (60 s tras 15 s de calentamiento). Cada panel tiene su propia escala.</text>
+  </g>
+</svg>

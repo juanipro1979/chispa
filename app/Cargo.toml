@@ -1,0 +1,32 @@
+[package]
+name = "chispa-app"
+description = "Chispa: app de escritorio"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "chispa"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+chispa-core = { path = "../core" }
+tauri = { version = "2", features = ["tray-icon"] }
+tauri-plugin-global-shortcut = "2"
+tauri-plugin-single-instance = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+keyring = { version = "3", features = ["windows-native"] }
+windows-collections = "0.3"
+ureq = { version = "2", features = ["json"] }
+tungstenite = { version = "0.26", features = ["rustls-tls-webpki-roots"] }
+windows = { version = "0.62", features = [
+    "Foundation",
+    "Foundation_Collections",
+    "Globalization",
+    "Media_SpeechRecognition",
+    "Win32_System_Com",
+] }

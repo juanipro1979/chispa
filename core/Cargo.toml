@@ -1,0 +1,26 @@
+[package]
+name = "chispa-core"
+description = "Motor de Chispa: libobs, autoconfiguración y bus de comandos"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "chispa_core"
+path = "src/lib.rs"
+
+[[bin]]
+name = "chispa-proto"
+path = "src/main.rs"
+
+[dependencies]
+libobs-simple = "9"
+sysinfo = "0.37"
+anyhow = "1"
+serde = { version = "1", features = ["derive"] }
+# Misma versión que usa libobs-simple, así no se compila dos veces
+windows = { version = "0.62", features = ["Win32_Media_Audio", "Win32_System_Com"] }
+
+[package.metadata]
+# cargo-obs-build lee esto para bajar los binarios de OBS que coinciden con el crate.
+libobs-version = "32.1.0"
