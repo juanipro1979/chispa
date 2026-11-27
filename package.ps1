@@ -2,7 +2,7 @@
 # Requiere haber corrido antes:
 #   cargo build --release --workspace
 #   cargo obs-build build --out-dir target/release
-param([string]$Version = "0.4.0")
+param([string]$Version = "0.5.0")
 $ErrorActionPreference = "Stop"
 
 $root = $PSScriptRoot

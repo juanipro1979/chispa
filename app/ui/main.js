@@ -136,6 +136,7 @@ let pvSent = null;
 async function syncPreview() {
   const want = pvOn && tab === "control" && !document.hidden && st?.ready;
   $("#pv-toggle").textContent = pvOn ? t("preview_hide") : t("preview_show");
+  $(".pv-wrap").classList.toggle("off", !pvOn);
   $("#pv-msg").hidden = want;
   if (!want) {
     if (pvSent !== null) {

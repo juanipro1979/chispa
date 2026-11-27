@@ -153,3 +153,5 @@ h3 { margin: 4px 0 4px; font-size: 14px; }
 .pv-msg { color: var(--muted); font-size: 12px; }
 .pv-bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 2px 0; }
 .small-txt { font-size: 11px; }
+.pv-wrap.off .pv { display: none; }
+.pv-wrap.off .pv-bar { padding-top: 0; }

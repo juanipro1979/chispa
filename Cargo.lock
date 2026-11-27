@@ -525,7 +525,7 @@ checksum = "4e7648175b45a9a48536d676f68d918270699102aa8dab5496df06904c914600"
 
 [[package]]
 name = "chispa-app"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "chispa-core",
  "keyring",
@@ -543,7 +543,7 @@ dependencies = [
 
 [[package]]
 name = "chispa-core"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "anyhow",
  "libobs-simple",

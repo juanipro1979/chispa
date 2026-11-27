@@ -30,6 +30,19 @@ struct AppState {
 
 const CHAT_LOG_MAX: usize = 200;
 
+/// Log de diagnóstico en %TEMP%\chispa-debug.log (solo con la variable CHISPA_DEBUG)
+fn dlog(msg: &str) {
+    if std::env::var_os("CHISPA_DEBUG").is_none() {
+        return;
+    }
+    use std::io::Write;
+    let p = std::env::temp_dir().join("chispa-debug.log");
+    if let Ok(mut f) = std::fs::OpenOptions::new().create(true).append(true).open(p) {
+        let t = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis()).unwrap_or(0);
+        let _ = writeln!(f, "{t} {msg}");
+    }
+}
+
 /// Atajos globales. Alt+F-teclas porque Ctrl+Shift+letra choca con navegadores y con AMD Adrenalin.
 const HOTKEYS: [(Code, &str, &str); 6] = [
     (Code::F10, "clip", "Alt+F10"),
@@ -228,6 +241,7 @@ fn show_window(app: &AppHandle) {
 /// La vista previa vive dentro de la ventana: se cierra antes de destruirla. Se hace en otro hilo,
 /// porque libobs necesita que el hilo principal siga atendiendo mensajes mientras saca la ventana hija.
 fn close_window(app: &AppHandle) {
+    dlog("close_window");
     let app = app.clone();
     std::thread::spawn(move || {
         let _ = app.state::<AppState>().engine.send(Command::Preview(None));
@@ -251,6 +265,7 @@ struct Rect {
 /// Vista previa: `rect` en px CSS (la UI ya lo multiplica por devicePixelRatio). None la cierra.
 #[tauri::command]
 async fn preview(app: AppHandle, rect: Option<Rect>) -> Result<(), String> {
+    dlog(&format!("preview {:?}", rect.as_ref().map(|r| (r.x, r.y, r.w, r.h))));
     let cmd = match rect {
         None => Command::Preview(None),
         Some(r) => {
@@ -443,6 +458,7 @@ fn open_folder(state: tauri::State<'_, AppState>, which: String) -> Result<(), S
 /// Modo Stream: se cierra la UI (libera WebView2) y Chispa queda solo en la bandeja.
 #[tauri::command]
 fn stream_mode(app: AppHandle) {
+    dlog("stream_mode (botón)");
     close_window(&app);
 }
 
@@ -543,6 +559,7 @@ fn main() {
             preview
         ])
         .on_window_event(|window, event| {
+            dlog(&format!("window event: {event:?}"));
             // Cerrar con la X: primero se saca la vista previa de libobs y después se destruye la ventana
             if let tauri::WindowEvent::CloseRequested { api, .. } = event {
                 api.prevent_close();
