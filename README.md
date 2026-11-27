@@ -2,6 +2,13 @@
 
 **Chispa** es una app para grabar, clipear y transmitir pensada para **PCs flojas**. Usa el motor de OBS (libobs) sin su interfaz pesada y se configura sola según tu PC. La manejás con botones, con atajos o con la voz: *«Chispa, clipeá eso»*.
 
+<p align="center">
+  <a href="https://github.com/juanipro1979/chispa/releases/download/v0.4.0/chispa-anuncio.mp4">
+    <img src="docs/img/anuncio.gif" alt="Anuncio animado de Chispa: se configura sola, se maneja con la voz, multistream con un solo encode y 45 % menos RAM que OBS" width="100%">
+  </a>
+  <br><sub>▶ <a href="https://github.com/juanipro1979/chispa/releases/download/v0.4.0/chispa-anuncio.mp4">Ver el anuncio en calidad completa (MP4, 1080p, con sonido)</a> · también está en <a href="docs/video/chispa-anuncio.mp4"><code>docs/video/</code></a></sub>
+</p>
+
 <p align="center"><img src="docs/img/app.svg" alt="Ilustración de la app de Chispa en vivo, con el chat unificado de Twitch y Kick" width="100%"></p>
 
 ## Qué hace
@@ -16,7 +23,25 @@
 | 💬 **Chat unificado** | Muestra el chat de Twitch y Kick en una sola lista. Las alertas de subs, regalos, raids y bits aparecen también en el stream. |
 | 🔑 **Cuenta de Twitch** | Se conecta por OAuth: Chispa trae la clave sola y te deja cambiar el título y la categoría y poner marcadores. |
 | 🎬 **Escenas listas** | *Juego* (pantalla con la cámara en la esquina), *Ya vuelvo* y *Charla* (cámara a pantalla completa). |
+| 👀 **Vista previa** | Muestra en la app lo mismo que ve tu stream. La dibuja la GPU directamente, sin copiar cuadros, y se apaga sola al cambiar de pestaña, minimizar o pasar a Modo Stream. |
 | 🪶 **Modo Stream** | Cierra la interfaz y deja Chispa en la bandeja: en vivo ocupa unos **106 MB**. |
+
+## ¿Dónde se guardan tus videos?
+
+Todo queda en la carpeta **Videos** de Windows, dentro de `Chispa`:
+
+| Qué | Dónde | Nombre del archivo |
+|---|---|---|
+| ✂️ Clips (Alt+F10 o «Chispa, clipeá eso») | `%USERPROFILE%\Videos\Chispa\Clips\` | `2026-11-27 15-05-22.mp4` (fecha y hora) |
+| 📱 Clips verticales 9:16 (Alt+F11) | La misma carpeta `Clips`, al lado del clip original | `2026-11-27 15-05-22 vertical.mp4` |
+| 🔴 Grabaciones (Alt+F9) | `%USERPROFILE%\Videos\Chispa\Grabaciones\` | `2026-11-27 15-30-00.mp4` (cuándo empezó) |
+
+- Por ejemplo, `C:\Users\<tu usuario>\Videos\Chispa\Clips`. Las carpetas se crean solas la primera vez.
+- En la pestaña **Control** de la app, la fila **Carpetas** tiene dos botones, *Clips* y *Grabaciones*, que las abren en el Explorador.
+- Los clips duran los últimos **30 s**. Mientras no se guardan, viven en la RAM: no se escribe nada al disco hasta que pedís el clip.
+- Lo que se transmite en vivo no se guarda en tu PC salvo que también grabes. Twitch y YouTube guardan su propio VOD.
+- Si desinstalás Chispa, tus videos **no se borran**.
+- Los ajustes van en `%APPDATA%\Chispa\config.json`. Las claves y tokens van en el Administrador de credenciales de Windows, en las entradas `Chispa`.
 
 ## Multistream sin pagar doble
 

@@ -225,10 +225,43 @@ fn show_window(app: &AppHandle) {
 }
 
 /// Cierra la ventana del todo para liberar WebView2 (~300 MB). El motor sigue en la bandeja.
+/// La vista previa vive dentro de la ventana: se cierra antes de destruirla. Se hace en otro hilo,
+/// porque libobs necesita que el hilo principal siga atendiendo mensajes mientras saca la ventana hija.
 fn close_window(app: &AppHandle) {
-    if let Some(w) = app.get_webview_window("main") {
-        let _ = w.destroy();
-    }
+    let app = app.clone();
+    std::thread::spawn(move || {
+        let _ = app.state::<AppState>().engine.send(Command::Preview(None));
+        let app2 = app.clone();
+        let _ = app.run_on_main_thread(move || {
+            if let Some(w) = app2.get_webview_window("main") {
+                let _ = w.destroy();
+            }
+        });
+    });
+}
+
+#[derive(Deserialize)]
+struct Rect {
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+}
+
+/// Vista previa: `rect` en px CSS (la UI ya lo multiplica por devicePixelRatio). None la cierra.
+#[tauri::command]
+async fn preview(app: AppHandle, rect: Option<Rect>) -> Result<(), String> {
+    let cmd = match rect {
+        None => Command::Preview(None),
+        Some(r) => {
+            let w = app.get_webview_window("main").ok_or("sin ventana")?;
+            let hwnd = w.hwnd().map_err(|e| e.to_string())?.0 as isize;
+            Command::Preview(Some((hwnd, r.x.round() as i32, r.y.round() as i32, r.w.round() as u32, r.h.round() as u32)))
+        }
+    };
+    let engine = app.state::<AppState>().engine.clone();
+    tauri::async_runtime::spawn_blocking(move || engine.send(cmd)).await.map_err(|e| e.to_string())??;
+    Ok(())
 }
 
 // ---------- Comandos para la UI ----------
@@ -506,8 +539,16 @@ fn main() {
             twitch_update,
             open_link,
             open_folder,
-            stream_mode
+            stream_mode,
+            preview
         ])
+        .on_window_event(|window, event| {
+            // Cerrar con la X: primero se saca la vista previa de libobs y después se destruye la ventana
+            if let tauri::WindowEvent::CloseRequested { api, .. } = event {
+                api.prevent_close();
+                close_window(window.app_handle());
+            }
+        })
         .build(tauri::generate_context!())
         .expect("error al iniciar Chispa")
         .run(|_app, event| {

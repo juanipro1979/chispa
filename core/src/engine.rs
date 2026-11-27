@@ -34,6 +34,8 @@ use libobs_simple::wrapper::data::{
     properties::{types::ObsListItemValue, ObsProperty, ObsPropertyObject},
 };
 
+use libobs_simple::wrapper::display::{ObsDisplayCreationData, ObsDisplayRef, ObsWindowHandle, WindowPositionTrait};
+
 use crate::{
     audio::{self, MicChoice},
     live::{DestHealth, Live},
@@ -107,6 +109,7 @@ pub struct Engine {
     cam_wanted: bool,
     alert: Option<ObsSceneItemRef<ObsSourceRef>>,
     alert_until: Option<Instant>,
+    preview: Option<ObsDisplayRef>,
     pub mode: SceneMode,
     _desktop_audio: Option<ObsSceneItemRef<ObsSourceRef>>,
     mic: Option<ObsSceneItemRef<ObsSourceRef>>,
@@ -214,6 +217,7 @@ impl Engine {
             cam_wanted: false,
             alert: None,
             alert_until: None,
+            preview: None,
             mode: SceneMode::Juego,
             _desktop_audio: desktop_audio,
             mic,
@@ -272,7 +276,11 @@ impl Engine {
         if let Some((_, _, p)) = &self.record {
             return Ok(p.clone());
         }
-        let path = self.opts.rec_dir.join(format!("chispa-{}.mp4", unix_now()));
+        // Mismo formato que los clips: "2026-11-27 15-05-22.mp4"
+        let mut path = self.opts.rec_dir.join(format!("{}.mp4", local_stamp()));
+        if path.exists() {
+            path = self.opts.rec_dir.join(format!("{} ({}).mp4", local_stamp(), unix_now() % 1000));
+        }
         let out = self
             .ctx
             .simple_output_builder("chispa-rec", ObsPath::new(&path.to_string_lossy()))
@@ -517,6 +525,35 @@ impl Engine {
         }
     }
 
+    // ---------- Vista previa ----------
+
+    /// Muestra la salida (lo que ve el stream) dentro de la ventana `hwnd`, en el rectángulo dado
+    /// (px físicos, relativo al área cliente). libobs la dibuja por GPU en una ventana hija.
+    pub fn set_preview(&mut self, hwnd: isize, x: i32, y: i32, w: u32, h: u32) -> Result<()> {
+        if let Some(d) = &self.preview {
+            d.set_pos(x, y)?;
+            d.set_size(w.max(2), h.max(2))?;
+            return Ok(());
+        }
+        // Safety: el HWND es la ventana principal de la app; la app cierra la vista previa
+        // (close_preview) antes de destruir esa ventana.
+        let handle = unsafe { ObsWindowHandle::new_from_handle(hwnd as *mut std::ffi::c_void) };
+        let data = ObsDisplayCreationData::new(handle, x, y, w.max(2), h.max(2)).set_background_color(0x0013_1111);
+        let d = self.ctx.display(data).context("no pude crear la vista previa")?;
+        self.preview = Some(d);
+        Ok(())
+    }
+
+    pub fn close_preview(&mut self) {
+        if let Some(d) = self.preview.take() {
+            let _ = self.ctx.remove_display(&d);
+        }
+    }
+
+    pub fn preview_on(&self) -> bool {
+        self.preview.is_some()
+    }
+
     pub fn set_mic_muted(&mut self, muted: bool) -> Result<bool> {
         let mic = self.mic.as_ref().ok_or_else(|| anyhow!("No hay micrófono"))?;
         mic.inner_source().set_muted(muted)?;
@@ -528,6 +565,7 @@ impl Engine {
     }
 
     pub fn shutdown(&mut self) {
+        self.close_preview();
         let _ = self.stop_stream();
         let _ = self.stop_record();
         let _ = self.set_replay(false);
@@ -619,6 +657,12 @@ impl CpuWatch {
         }
         None
     }
+}
+
+/// Fecha y hora local para nombres de archivo: "2026-11-27 15-05-22"
+fn local_stamp() -> String {
+    let t = unsafe { windows::Win32::System::SystemInformation::GetLocalTime() };
+    format!("{:04}-{:02}-{:02} {:02}-{:02}-{:02}", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond)
 }
 
 fn unix_now() -> u64 {

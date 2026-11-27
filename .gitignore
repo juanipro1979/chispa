@@ -12,3 +12,10 @@
 /text-freetype2
 /win-capture
 /app/gen
+/promo/frames
+/promo/qc
+/promo/gif
+/promo/*.wav
+/promo/*.log
+/promo/*.err
+/promo/__pycache__

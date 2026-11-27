@@ -95,6 +95,7 @@ function render(s) {
   if (cfg) pill($("#pill-voice"), cfg.voice_on ? t("listening") : t("off"), cfg.voice_on);
 
   if (s.notice) toast(s.notice, false);
+  schedulePreview();
 }
 
 async function tick() {
@@ -127,10 +128,46 @@ async function doAction(name, btn) {
   }
 }
 
+// ---------- Vista previa (la dibuja libobs por GPU en una ventana nativa encima de #pv) ----------
+
+let pvOn = localStorage.getItem("preview") !== "off";
+let pvSent = null;
+
+async function syncPreview() {
+  const want = pvOn && tab === "control" && !document.hidden && st?.ready;
+  $("#pv-toggle").textContent = pvOn ? t("preview_hide") : t("preview_show");
+  $("#pv-msg").hidden = want;
+  if (!want) {
+    if (pvSent !== null) {
+      pvSent = null;
+      await invoke("preview", { rect: null }).catch(() => {});
+    }
+    return;
+  }
+  const r = $("#pv").getBoundingClientRect();
+  const k = window.devicePixelRatio || 1;
+  const rect = { x: r.left * k, y: r.top * k, w: r.width * k, h: r.height * k };
+  const key = JSON.stringify(rect);
+  if (key === pvSent) return;
+  pvSent = key;
+  await invoke("preview", { rect }).catch((e) => {
+    pvSent = null;
+    pvOn = false;
+    toast(String(e), false);
+  });
+}
+
+let pvFrame = 0;
+function schedulePreview() {
+  cancelAnimationFrame(pvFrame);
+  pvFrame = requestAnimationFrame(() => syncPreview());
+}
+
 function showTab(name) {
   tab = name;
   $$("[data-tab]").forEach((b) => b.classList.toggle("sel", b.dataset.tab === name));
   $$(".tab").forEach((s) => (s.hidden = s.id !== `tab-${name}`));
+  schedulePreview();
   if (name === "chat") {
     unread = 0;
     $("#chat-badge").hidden = true;
@@ -149,6 +186,7 @@ async function loadConfig() {
   cfg = await invoke("get_config");
   lang = cfg.lang || "es";
   applyI18n();
+  schedulePreview();
   for (const [action, key] of cfg.hotkeys) {
     $$(`kbd[data-hk="${action}"]`).forEach((k) => (k.textContent = key));
   }
@@ -288,7 +326,18 @@ $("#tw-update").addEventListener("click", async () => {
   }
 });
 
-$("#stream-mode").addEventListener("click", () => invoke("stream_mode"));
+$("#stream-mode").addEventListener("click", async () => {
+  pvSent = null;
+  await invoke("preview", { rect: null }).catch(() => {});
+  invoke("stream_mode");
+});
+$("#pv-toggle").addEventListener("click", () => {
+  pvOn = !pvOn;
+  localStorage.setItem("preview", pvOn ? "on" : "off");
+  syncPreview();
+});
+document.body.addEventListener("scroll", schedulePreview);
+window.addEventListener("resize", schedulePreview);
 
 listen("toast", (e) => toast(e.payload.msg, e.payload.ok));
 listen("chat", (e) => addChat(e.payload));
@@ -296,7 +345,10 @@ listen("twitch", () => {
   $("#tw-code").hidden = true;
   loadConfig();
 });
-document.addEventListener("visibilitychange", tick);
+document.addEventListener("visibilitychange", () => {
+  tick();
+  schedulePreview();
+});
 
 loadConfig()
   .then(() => invoke("chat_history"))

@@ -18,6 +18,8 @@ pub enum Command {
     SetScene(SceneMode),
     /// Muestra una alerta en el stream (sin respuesta para el usuario)
     ShowAlert(String),
+    /// Vista previa: Some((hwnd, x, y, ancho, alto)) la abre o la mueve; None la cierra
+    Preview(Option<(isize, i32, i32, u32, u32)>),
     ToggleCamera,
     ToggleRecord,
     /// Sale en vivo a uno o varios destinos (un solo encode)
@@ -228,6 +230,14 @@ fn handle(engine: &mut Engine, cmd: Command, last_clip: &mut Option<String>) -> 
             })
         }
         Command::ClipVertical => Ok(String::new()),
+        Command::Preview(Some((hwnd, x, y, w, h))) => {
+            engine.set_preview(hwnd, x, y, w, h)?;
+            Ok(String::new())
+        }
+        Command::Preview(None) => {
+            engine.close_preview();
+            Ok(String::new())
+        }
         Command::ShowAlert(t) => {
             engine.show_alert(&t)?;
             Ok(String::new())

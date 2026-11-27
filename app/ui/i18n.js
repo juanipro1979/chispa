@@ -2,6 +2,8 @@
 window.I18N = {
   es: {
     booting: "Preparando…", booting_engine: "Preparando el motor…",
+    preview_off: "Vista previa apagada", preview_label: "Vista previa · lo que ve tu stream",
+    preview_hide: "Ocultar", preview_show: "Mostrar",
     tab_control: "Control", tab_chat: "Chat", tab_settings: "Ajustes",
     clip: "Clip", last_s: (n) => `últimos ${n} s`, enable_clips: "activá los clips automáticos",
     record: "Grabar", stop: "Parar", to_mp4: "a MP4",
@@ -28,6 +30,8 @@ window.I18N = {
   },
   en: {
     booting: "Starting…", booting_engine: "Starting the engine…",
+    preview_off: "Preview off", preview_label: "Preview · what your stream sees",
+    preview_hide: "Hide", preview_show: "Show",
     tab_control: "Control", tab_chat: "Chat", tab_settings: "Settings",
     clip: "Clip", last_s: (n) => `last ${n} s`, enable_clips: "turn on auto clips",
     record: "Record", stop: "Stop", to_mp4: "to MP4",
